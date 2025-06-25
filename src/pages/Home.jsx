@@ -16,25 +16,18 @@ function Home() {
     }
   };
 
-  useEffect(() => {
-    let ticking = false;
+useEffect(() => {
+  const handleWheel = (e) => {
+    if (e.deltaY > 50 && !hasNavigated.current) {
+      hasNavigated.current = true;
+      navigate("/properties");
+    }
+  };
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (window.scrollY > 100 && !hasNavigated.current) {
-            hasNavigated.current = true;
-            navigate("/properties");
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+  window.addEventListener("wheel", handleWheel, { passive: true });
+  return () => window.removeEventListener("wheel", handleWheel);
+}, [navigate]);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [navigate]);
 
   return (
     <div className="font-sans text-white overflow-x-hidden bg-[#f5f5f5]">
