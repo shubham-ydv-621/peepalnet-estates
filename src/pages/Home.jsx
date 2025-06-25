@@ -15,18 +15,25 @@ function Home() {
       navigate("/properties");
     }
   };
-
 useEffect(() => {
-  const handleWheel = (e) => {
-    if (e.deltaY > 50 && !hasNavigated.current) {
+  const handleScroll = () => {
+    const isAtBottom =
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
+
+    if (isAtBottom && !hasNavigated.current) {
       hasNavigated.current = true;
-      navigate("/properties");
+
+      // Optional: delay navigation for smoother UX
+      setTimeout(() => {
+        navigate("/properties");
+      }, 300);
     }
   };
 
-  window.addEventListener("wheel", handleWheel, { passive: true });
-  return () => window.removeEventListener("wheel", handleWheel);
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
 }, [navigate]);
+
 
 
   return (
